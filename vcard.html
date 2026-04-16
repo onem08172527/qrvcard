@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>İletişim</title>
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background: #f2f2f2;
+    margin: 0;
+}
+
+.container {
+    max-width: 420px;
+    margin: auto;
+    padding: 30px 20px;
+    text-align: center;
+}
+
+.card {
+    background: white;
+    padding: 25px;
+    border-radius: 15px;
+}
+
+.logo {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.logo img {
+    max-width: 130px;
+    border-radius: 12px;
+}
+
+a {
+    display: block;
+    padding: 14px;
+    margin: 10px 0;
+    border-radius: 10px;
+    text-decoration: none;
+    color: white;
+    font-size: 16px;
+}
+
+.insta { background: #E1306C; }
+.face { background: #1877F2; }
+.wa { background: #25D366; }
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <div class="card">
+
+        <h2>İletişim</h2>
+
+        <div class="logo" id="logo"></div>
+
+        <div id="links"></div>
+
+    </div>
+</div>
+
+<script>
+const p = new URLSearchParams(window.location.search);
+
+const logo = p.get("l");
+const insta = p.get("i");
+const face = p.get("f");
+const wa = p.get("w");
+
+if (logo) {
+    document.getElementById("logo").innerHTML =
+        `<img src="${decodeURIComponent(logo)}">`;
+}
+
+let links = "";
+
+if (insta)
+    links += `<a class="insta" href="${decodeURIComponent(insta)}">Instagram</a>`;
+
+if (face)
+    links += `<a class="face" href="${decodeURIComponent(face)}">Facebook</a>`;
+
+if (wa)
+    links += `<a class="wa" href="${decodeURIComponent(wa)}">WhatsApp</a>`;
+
+document.getElementById("links").innerHTML = links;
+</script>
+
+</body>
+</html>

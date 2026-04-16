@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QR Oluşturucu</title>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+<style>
+* { box-sizing: border-box; }
+
+body {
+    font-family: Arial;
+    background: #f2f2f2;
+    margin: 0;
+}
+
+.container {
+    max-width: 420px;
+    margin: auto;
+    padding: 20px;
+}
+
+.card {
+    background: white;
+    padding: 20px;
+    border-radius: 15px;
+}
+
+h2 { text-align:center; }
+
+label {
+    font-weight: bold;
+    display:block;
+    margin-top:10px;
+}
+
+input {
+    width: 100%;
+    padding: 12px;
+    margin-top: 5px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 15px;
+    background: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 10px;
+}
+
+.logo-preview {
+    display:flex;
+    justify-content:center;
+    margin-top:10px;
+}
+
+.logo-preview img {
+    max-width:120px;
+    border-radius:12px;
+}
+
+#qrcode {
+    display:flex;
+    justify-content:center;
+    margin-top:20px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+<div class="card">
+
+<h2>QR Oluştur</h2>
+
+<label>Logo URL</label>
+<input type="text" id="logo" placeholder="https://...">
+
+<div class="logo-preview">
+    <img id="preview" style="display:none;">
+</div>
+
+<label>Instagram Kullanıcı Adı</label>
+<input type="text" id="instagram" placeholder="ornek_kullanici">
+
+<label>Facebook Kullanıcı Adı</label>
+<input type="text" id="facebook" placeholder="ornek.kullanici">
+
+<label>Telefon Numarası</label>
+<input type="text" id="phone" placeholder="905xxxxxxxxx">
+
+<button onclick="generateQR()">QR Oluştur</button>
+
+<div id="qrcode"></div>
+
+</div>
+</div>
+
+<script>
+
+// 🔹 Logo önizleme
+document.getElementById("logo").addEventListener("input", function() {
+    const img = document.getElementById("preview");
+    if (this.value.startsWith("http")) {
+        img.src = this.value;
+        img.style.display = "block";
+    } else {
+        img.style.display = "none";
+    }
+});
+
+// 🔹 Link üretici
+function generateQR() {
+
+    const logo = encodeURIComponent(document.getElementById("logo").value.trim());
+    const instaUser = document.getElementById("instagram").value.trim();
+    const faceUser = document.getElementById("facebook").value.trim();
+    let phone = document.getElementById("phone").value.trim();
+
+    // 🔥 otomatik link üretimi
+    const instagram = instaUser ? `https://instagram.com/${instaUser}` : "";
+    const facebook = faceUser ? `https://facebook.com/${faceUser}` : "";
+
+    if (phone) {
+        phone = phone.replace(/\D/g, "");
+        phone = `https://wa.me/${phone}`;
+    }
+
+    const baseUrl = "https://qr.onemozgulgen.workers.dev/vcard.html";
+
+    const url =
+        `${baseUrl}?l=${logo}` +
+        `&i=${encodeURIComponent(instagram)}` +
+        `&f=${encodeURIComponent(facebook)}` +
+        `&w=${encodeURIComponent(phone)}`;
+
+    document.getElementById("qrcode").innerHTML = "";
+
+    new QRCode(document.getElementById("qrcode"), {
+        text: url,
+        width: 220,
+        height: 220
+    });
+}
+</script>
+
+</body>
+</html>
